@@ -4,6 +4,7 @@ from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from database import Base
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from database import Base
+from sqlalchemy import DateTime
 
 class Book(Base):
     __tablename__ = 'books'
@@ -15,4 +16,17 @@ class Book(Base):
     details = Column(String, index=True)
     short_details = Column(String, index=True)
     genre = Column(String, index=True)
+
+class Coffee(Base):
+    __tablename__ = 'coffee'
+    id = Column(Integer, primary_key=True, index=True, unique=True, autoincrement=True)
+    name = Column(String, index=True)
+    description = Column(String, index=True)
+    price = Column(Integer, index=True)
+    is_available = Column(Boolean, index=True)
+    quantity = Column(Integer, index=True)
+    notes = Column(String, index=True)
+    ordered_time = Column(DateTime, index=True)
+
+
 
