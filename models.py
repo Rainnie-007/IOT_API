@@ -24,9 +24,16 @@ class Coffee(Base):
     description = Column(String, index=True)
     price = Column(Integer, index=True)
     is_available = Column(Boolean, index=True)
+    
+class Order(Base):
+    __tablename__ = 'orders'
+    id = Column(Integer, primary_key=True, index=True, unique=True, autoincrement=True)
+    coffee_id = Column(Integer, ForeignKey('coffee.id'))
+    order_date = Column(DateTime, index=True)
     quantity = Column(Integer, index=True)
+    total_price = Column(Integer, index=True)
     notes = Column(String, index=True)
-    ordered_time = Column(DateTime, index=True)
+
 
 
 

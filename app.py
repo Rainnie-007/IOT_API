@@ -82,7 +82,7 @@ async def get_coffee(coffee_id: int, db: Session = Depends(get_db)):
 
 @router_v1.post('/coffee')
 async def create_coffee(coffee: dict, response: Response, db: Session = Depends(get_db)):
-    new_coffee = models.Coffee(name=coffee['name'], description=coffee['description'], price=coffee['price'], is_available=coffee['is_available'], quantity=coffee['quantity'], notes=coffee['notes'], ordered_time=coffee['ordered_time'])
+    new_coffee = models.Coffee(name=coffee['name'], description=coffee['description'], price=coffee['price'], is_available=coffee['is_available'])
     db.add(new_coffee)
     db.commit()
     db.refresh(new_coffee)
