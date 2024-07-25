@@ -110,6 +110,45 @@ async def delete_coffee(response: Response, coffee_id: int, db: Session = Depend
         return {"message": "Coffee deleted successfully"}
     else:
         return response.status_code == 404
+    
+@router_v1.get('/coffee')
+async def get_coffee(db: Session = Depends(get_db)):
+    return db.query(models.Coffee).all()
+
+@router_v1.get('/coffee/{coffee_id}')
+async def get_coffee(coffee_id: int, db: Session = Depends(get_db)):
+    return db.query(models.Coffee).filter(models.Coffee.id == coffee_id).first()
+
+@router_v1.post('/coffee')
+async def create_coffee(coffee: dict, response: Response, db: Session = Depends(get_db)):
+    new_coffee = models.Coffee(name=coffee['name'], description=coffee['description'], price=coffee['price'], is_available=coffee['is_available'])
+    db.add(new_coffee)
+    db.commit()
+    db.refresh(new_coffee)
+    response.status_code = 201
+    return new_coffee
+
+@router_v1.patch('/coffee/{coffee_id}')
+async def update_coffee(response: Response ,coffee_id: int, coffee: dict, db: Session = Depends(get_db),):
+    db_coffee = db.query(models.Coffee).filter(models.Coffee.id == coffee_id).first()
+    if db_coffee:
+        for key, value in coffee.items():
+            setattr(db_coffee, key, value)
+        db.commit()
+        db.refresh(db_coffee)
+        return db_coffee
+    else:
+        return response.status_code == 404
+
+@router_v1.delete('/coffee/{coffee_id}')
+async def delete_coffee(response: Response, coffee_id: int, db: Session = Depends(get_db)):
+    db_coffee = db.query(models.Coffee).filter(models.Coffee.id == coffee_id).first()
+    if db_coffee:
+        db.delete(db_coffee)
+        db.commit()
+        return {"message": "Coffee deleted successfully"}
+    else:
+        return response.status_code == 404
 
 # ...
 app.include_router(router_v1)
